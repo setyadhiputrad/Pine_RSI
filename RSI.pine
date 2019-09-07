@@ -1,0 +1,49 @@
+//@version=4
+study( 
+     title='RSI[tytyd]',
+     shorttitle='RSI', 
+     format=format.price,
+     precision=2
+     )
+
+src = input(close, title="RSI Source")
+len = input(14, minval=1, title="Length")
+up = rma(max(change(src), 0), len)
+down = rma(-min(change(src), 0), len)
+rsi = down == 0 ? 100 : up == 0 ? 0 : 100 - (100 / (1 + up / down))
+
+//color hline
+long_90 = color.new(color.green, 90)
+short_90 = color.new(color.red, 90)
+
+//color plot rsi
+//Over SOLD Color  (buy indicator)
+color_long = color.green
+//Over BOUGHT Color (sell indicator)
+color_short = color.red
+
+//RSI peaks
+color_rsi = color.white
+if rsi > 55
+    color_rsi := color_long
+if rsi < 45
+    color_rsi := color_short
+
+band0 = hline(0, color=color.green, linestyle=hline.style_solid, linewidth=1)
+band20 = hline(20, color=long_90, linestyle=hline.style_solid, linewidth=1)
+band25 = hline(25, color=color.green, linestyle=hline.style_solid, linewidth=1)
+band30 = hline(30, color=long_90, linestyle=hline.style_solid, linewidth=1)
+band70 = hline(70, color=short_90, linestyle=hline.style_solid, linewidth=1)
+band75 = hline(75, color=color.red, linestyle=hline.style_solid, linewidth=1)
+band80 = hline(80, color=short_90, linestyle=hline.style_solid, linewidth=1)
+band100 = hline(100, color=color.red, linestyle=hline.style_solid, linewidth=1)
+
+band_long = hline(45, color=color.yellow, linestyle=hline.style_dotted)
+band_short = hline(55, color=color.yellow, linestyle=hline.style_dotted)
+
+plot(rsi, title='RSI', color=color_rsi, linewidth=2)
+
+fill(band30, band20, color=color.green, transp=90)
+fill(band20, band0, color=color.green, transp=75)
+fill(band70, band80, color=color.red, transp=90)
+fill(band80, band100, color=color.red, transp=75)
