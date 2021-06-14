@@ -3,10 +3,11 @@ study(
      title='RSI[tytyd]',
      shorttitle='RSI', 
      format=format.price,
-     precision=2
+     precision=2,
+     resolution=""
      )
 
-src = input(close, title="RSI Source")
+src = input(close, "Source", title="RSI Source")
 len = input(14, minval=1, title="Length")
 up = rma(max(change(src), 0), len)
 down = rma(-min(change(src), 0), len)
